@@ -6,19 +6,15 @@ from PIL import Image
 import base64
 
 
-def render_svg(svg):
-    b64 = base64.b64encode(svg.encode('utf-8')).decode("utf-8")
-    html = r'<img src="data:image/svg+xml;base64,%s"/>' % b64
-    st.write(html, unsafe_allow_html=True)
 
 
 st.write('# Automata DFA Calculator ')
 
-st.write('### Select Automata Question')
 
-selection=st.selectbox("Select Question",['First','Second'])
 
-if selection == 'First':
+selection=st.selectbox("Select Problem",['( a + b ) ( a + b )* ( aa + bb ) ( ab + ba )  ( a + b )* ( aba + baa )','( 11 + 00 ) ( 1 + 0 )* ( 101 + 111 + 01 ) ( 00* + 11* ) ( 1 + 0 + 11 )'])
+
+if selection == '( a + b ) ( a + b )* ( aa + bb ) ( ab + ba )  ( a + b )* ( aba + baa )':
     alphabet = {"a", "b"}
     states = {"s1", "s2", "s3","s4", "s5", "s6","s7", "s8", "s9","s10", "s11", "s12"}
     initial_state = "s1"
@@ -63,10 +59,10 @@ if selection == 'First':
     },
     "s12":{
     }
-}
-dfa = SimpleDFA(states, alphabet, initial_state, accepting_states, transition_function)
+    }
+    dfa = SimpleDFA(states, alphabet, initial_state, accepting_states, transition_function)
 
-if selection=='Second':
+if selection=='( 11 + 00 ) ( 1 + 0 )* ( 101 + 111 + 01 ) ( 00* + 11* ) ( 1 + 0 + 11 )':
     alphabet = {"a", "b"}
     states = {"s1", "s2", "s3","s4", "s5", "s6","s7", "s8", "s9","s10", "s11", "s12"}
     initial_state = "s1"
@@ -127,9 +123,11 @@ with st.form(key='regex'):
 
         graph = dfa.to_graphviz()
         graph.render("DFA")
-        f = open("DFA.svg","r")
+        f = open("DFA","r")
         lines = f.readlines()
         line_string=''.join(lines)
         
-        render_svg(line_string)
+        
+
+        st.graphviz_chart(line_string)
         
