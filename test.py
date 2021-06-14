@@ -4,7 +4,7 @@ from graphviz import Digraph
 dot=Digraph()
 
 
-alphabet = {"a", "b", "c"}
+alphabet = {"a", "b"}
 states = {"s1", "s2", "s3","s4", "s5", "s6","s7", "s8", "s9","s10", "s11", "s12"}
 initial_state = "s1"
 accepting_states = {"s12"}
@@ -18,7 +18,7 @@ transition_function = {
         "b" : "s4",
     },
     "s3":{
-        "a" : "s5"
+        "a" : "s5",
     },
     "s4": {
         "b" : "s5",
