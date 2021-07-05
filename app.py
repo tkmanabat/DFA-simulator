@@ -1,133 +1,143 @@
 import streamlit as st
+from visual import dfa,dfa2
 
-from pythomata import SimpleDFA
+from automata.fa.dfa import DFA
+from visual_automata.fa.dfa import VisualDFA
 
-from PIL import Image
 import base64
 
 
+st.set_page_config(
+     page_title="DFA Simulator",
+     page_icon="📱",
+     layout="wide",
+     initial_sidebar_state="expanded",
+    )
 
 
-st.write('# Automata DFA Calculator ')
+if 'n' not in st.session_state:
+	    st.session_state.n = 0
+
+
+def show_transition(sample_string,n):
+    st.write('### Selected Regular Expression: ```' + regex+'```')
+    st.write('### String Checking: `'+ sample_string[0:n]+'`')
+    #st.graphviz_chart(dfa.show_diagram(sample_string[0:n]))
+    graph=dfa.show_diagram(sample_string[0:n])
+    
+    graph.format="svg"
+    graph.render("test")
+    f = open("test.svg","r")
+    lines = f.readlines()
+    line_string=''.join(lines)
+    render_svg(line_string)
 
 
 
-selection=st.selectbox("Select Problem",['( a + b ) ( a + b )* ( aa + bb ) ( ab + ba )  ( a + b )* ( aba + baa )','( 11 + 00 ) ( 1 + 0 )* ( 101 + 111 + 01 ) ( 00* + 11* ) ( 1 + 0 + 11 )'])
+def render_svg(svg):
+    b64 = base64.b64encode(svg.encode('utf-8')).decode("utf-8")
+    html = r'<img src="data:image/svg+xml;base64,%s" width="1100px" height="500px" />' % b64
+    st.write(html, unsafe_allow_html=True)
 
-if selection == '( a + b ) ( a + b )* ( aa + bb ) ( ab + ba )  ( a + b )* ( aba + baa )':
-    alphabet = {"a", "b"}
-    states = {"s1", "s2", "s3","s4", "s5", "s6","s7", "s8", "s9","s10", "s11", "s12"}
-    initial_state = "s1"
-    accepting_states = {"s12"}
-    transition_function = {
-    "s1": {
-        "a" : "s2",
-        "b" : "s2"
-    },
-    "s2": {
-        "a" : "s3",
-        "b" : "s4",
-    },
-    "s3":{
-        "a" : "s5",
-    },
-    "s4": {
-        "b" : "s5",
-    },
-    "s5": {
-        "a" : "s6",
-        "b" : "s7"
-    },
-    "s6":{
-        "b" : "s8"
-    },
-    "s7": {
-        "a" : "s8"
-    },
-    "s8":{
-        "a" : "s9",
-        "b" : "s10"
-    },
-    "s9": {
-        "b" : "s11"
-    },
-    "s10":{
-        "a" : "s11"
-    },
-    "s11": {
-        "a" : "s12"
-    },
-    "s12":{
-    }
-    }
-    dfa = SimpleDFA(states, alphabet, initial_state, accepting_states, transition_function)
 
-if selection=='( 11 + 00 ) ( 1 + 0 )* ( 101 + 111 + 01 ) ( 00* + 11* ) ( 1 + 0 + 11 )':
-    alphabet = {"a", "b"}
-    states = {"s1", "s2", "s3","s4", "s5", "s6","s7", "s8", "s9","s10", "s11", "s12"}
-    initial_state = "s1"
-    accepting_states = {"s12"}
-    transition_function = {
-        "s1": {
-            "a" : "s2",
-            "b" : "s2"
-        },
-        "s2": {
-            "a" : "s3",
-            "b" : "s4",
-        },
-        "s3":{
-            "a" : "s5",
-        },
-        "s4": {
-            "b" : "s5",
-        },
-        "s5": {
-            "a" : "s6",
-            "b" : "s7"
-        },
-        "s6":{
-            "b" : "s8"
-        },
-        "s7": {
-            "a" : "s8"
-        },
-        "s8":{
-            "a" : "s9",
-            "b" : "s10"
-        },
-        "s9": {
-            "b" : "s11"
-        },
-        "s10":{
-            "a" : "s11"
-        },
-        "s11": {
-            "a" : "s12"
-        },
-        "s12":{
-        }
-    }
-    dfa = SimpleDFA(states, alphabet, initial_state, accepting_states, transition_function)
 
-with st.form(key='regex'):
-    sample_string=st.text_input(label="Test the string")
-    submit_button=st.form_submit_button(label='Test')
+st.write('# DFA Simulator 🤹‍♂️')
+st.write ('Web application for step-by-step visual simulation of deterministic finite state machines which are defined with given regular expressions.')
 
-    if submit_button:
-       
-        st.write('### Is the string accepted?: ')
-        st.write(dfa.accepts(sample_string))
+
+st.sidebar.write('# Input Panel')
+st.sidebar.write(' Please select problem and input sample string for testing.')
+selection=st.sidebar.selectbox("Select Regular Expression",['Problem 1 (a,b)','Problem 2 (1,0)'])
+
+problem1='(a+b)(a+b)*(aa+bb)(ab+ba)(a+b)*(aba+baa)'
+problem2='(11+00)(1+0)*(101+111+01)(00*+11*)(1+0+11)'
+
+
+with st.form(key='input'):
+    with st.sidebar:
+        if selection=='Problem 1 (a,b)':
+            dfa=dfa
+            regex=problem1
+            #st.write('Selected Regex: **(a+b)(a+b)*(aa+bb)(ab+ba)(a+b)*(aba+baa)**' )
+
+        elif selection=='Problem 2 (1,0)':
+            dfa=dfa2
+            regex=problem2
+            #st.write('Selected Regex: **(11+00)(1+0)*(101+111+01)(00*+11*)(1+0+11)**' )
+
+        sample_string=st.text_input('Enter Sample String:')
+        #sample_string_bool=dfa.input_check(sample_string)
+
         
-        st.write('### DFA Diagram:')
+        submit_button=st.form_submit_button(label='Test')
 
-        graph = dfa.to_graphviz()
-        graph.render("DFA")
-        f = open("DFA","r")
-        lines = f.readlines()
-        line_string=''.join(lines)
-        
+        simulate_bool=st.checkbox('Simulate steps')
+
         
 
-        st.graphviz_chart(line_string)
-        
+
+if submit_button:
+    st.write('### Selected Regular Expression: ```' + regex+'```')
+
+    if sample_string[0]== 'a' or 'A' or 'b' or 'B':
+            sample_string=sample_string.lower()
+
+    sample_string_bool=dfa.input_check(sample_string)
+
+
+    #st.graphviz_chart(dfa.show_diagram(sample_string),use_container_width=True)
+
+    graph=dfa.show_diagram(sample_string)
+    graph.format="svg"
+    
+    graph.render("test")
+    f = open("test.svg","r")
+    lines = f.readlines()
+    line_string=''.join(lines)
+    render_svg(line_string)
+
+
+    if sample_string_bool.columns[0][0][1:-1]=='Accepted':
+        st.success(sample_string +' is accepted!')
+    elif sample_string_bool.columns[0][0][1:-1]=='Rejected':
+        st.error(sample_string +' is rejected!')
+
+    st.write("### Tabulated Steps: ")
+    col1, col2, col3 = st.beta_columns(3)
+    with col2:
+        st.dataframe(dfa.table,width=1100,height=500)
+
+if simulate_bool:
+    st.sidebar.write('# Simulator Navigation')
+    st.sidebar.write(' Use the buttons below to simulate the sample string thru the DFA.')
+    col1, col2 = st.sidebar.beta_columns([1.8,1])
+    with col2:
+        next_button=st.button('Next >') 
+    with col1:
+        back_button=st.button('< Back')
+
+
+    if next_button:
+
+        if st.session_state.n<len(sample_string):
+            st.session_state.n += 1
+            show_transition(sample_string,st.session_state.n)
+
+        elif st.session_state.n==len(sample_string):
+            show_transition(sample_string,st.session_state.n)
+            st.write("### End of simulation")
+            sample_string_bool=dfa.input_check(sample_string)
+            st.write('String is: `' + sample_string_bool.columns[0][0][1:-1]+'`')
+            st.write('### Tabulated Steps')
+            st.write(dfa.table)
+
+
+    elif back_button:
+
+        if st.session_state.n<=len(sample_string):
+            st.session_state.n -= 1
+            sample_string_bool=dfa.input_check(sample_string)
+            show_transition(sample_string,st.session_state.n)
+
+
+
