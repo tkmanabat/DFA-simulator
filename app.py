@@ -9,7 +9,7 @@ import base64
 
 st.set_page_config(
      page_title="DFA Simulator",
-     page_icon="📱",
+     page_icon="🚀",
      layout="wide",
      initial_sidebar_state="expanded",
     )
@@ -45,7 +45,7 @@ st.write('# DFA Simulator 🤹‍♂️')
 st.write ('Web application for step-by-step visual simulation of deterministic finite state machines which are defined with given regular expressions.')
 
 
-st.sidebar.write('# Input Panel')
+st.sidebar.write('# Input Panel 📚')
 st.sidebar.write(' Please select problem and input sample string for testing.')
 selection=st.sidebar.selectbox("Select Regular Expression",['Problem 1 (a,b)','Problem 2 (1,0)'])
 
