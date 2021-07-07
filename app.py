@@ -58,15 +58,15 @@ with st.form(key='input'):
         if selection=='Problem 1 (a,b)':
             dfa=dfa
             regex=problem1
-            #st.write('Selected Regex: **(a+b)(a+b)*(aa+bb)(ab+ba)(a+b)*(aba+baa)**' )
+            
 
         elif selection=='Problem 2 (1,0)':
             dfa=dfa2
             regex=problem2
-            #st.write('Selected Regex: **(11+00)(1+0)*(101+111+01)(00*+11*)(1+0+11)**' )
+            
 
         sample_string=st.text_input('Enter Sample String:')
-        #sample_string_bool=dfa.input_check(sample_string)
+       
 
         
         submit_button=st.form_submit_button(label='Test')
@@ -85,7 +85,7 @@ if submit_button:
     sample_string_bool=dfa.input_check(sample_string)
 
 
-    #st.graphviz_chart(dfa.show_diagram(sample_string),use_container_width=True)
+    
 
     graph=dfa.show_diagram(sample_string)
     graph.format="svg"
