@@ -1,10 +1,12 @@
 import streamlit as st
 from visual import dfa,dfa2
 
+
 from automata.fa.dfa import DFA
 from visual_automata.fa.dfa import VisualDFA
 
 import base64
+import graphviz
 
 
 st.set_page_config(
