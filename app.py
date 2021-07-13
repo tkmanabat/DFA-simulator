@@ -26,13 +26,8 @@ def show_transition(sample_string,n):
 
 
     graph=dfa.show_diagram(sample_string[0:n])
+    st.graphviz_chart(graph)
     
-    graph.format="svg"
-    graph.render("test")
-    f = open("test.svg","r")
-    lines = f.readlines()
-    line_string=''.join(lines)
-    render_svg(line_string)
 
 
 
@@ -84,14 +79,9 @@ if submit_button:
 
 
     graph=dfa.show_diagram(sample_string)
-    graph.format="svg"
-
-    graph.render("test")
-    f = open("test.svg","r")
-    lines = f.readlines()
-    line_string=''.join(lines)
-    render_svg(line_string)
-
+    st.graphviz_chart(graph)
+    
+    
 
     if sample_string_bool.columns[0][0][1:-1]=='Accepted':
         st.success(sample_string +' is accepted!')
@@ -158,3 +148,10 @@ if simulate_bool:
 
 
 
+def psuedo():
+    graph.format="svg"
+    graph.render("test")
+    f = open("test.svg","r")
+    lines = f.readlines()
+    line_string=''.join(lines)
+    render_svg(line_string)
